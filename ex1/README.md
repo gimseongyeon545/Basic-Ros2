@@ -6,6 +6,7 @@
    - rclpy.node.Node 의 `get_logger()` 함수
      - https://docs.ros2.org/foxy/api/rclpy/api/node.html
 4. `rclpy.init(); rclpy.spin(Heartbeat()); rclpy.shutdown()`
+   - https://docs.ros2.org/foxy/api/rclpy/api/init_shutdown.html
    - `rclpy.init(*, args=None, context=None)`
    - `rclpy.spin(node, executor=None)`
    - `rclpy.shutdown(*, context=None)`
