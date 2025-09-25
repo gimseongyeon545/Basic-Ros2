@@ -10,9 +10,9 @@
 5. `self.get_logger().info(f'beat {self.count}')`
    - rclpy.node.Node 의 `get_logger()` 함수
       - https://docs.ros2.org/foxy/api/rclpy/api/node.html#rclpy.node.Node.get_logger
-   - 반환: RcutilsLogger class
+   - 반환: RcutilsLogger class 객체
       - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/node.py#L385
-   - RcutilsLogger class 의 info() func
+   - RcutilsLogger class 객체의 info() func
       - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/impl/rcutils_logger.py#L418
 6. `rclpy.init(); rclpy.spin(Heartbeat()); rclpy.shutdown()`
    - https://docs.ros2.org/foxy/api/rclpy/api/init_shutdown.html
