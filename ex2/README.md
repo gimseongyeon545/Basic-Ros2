@@ -22,7 +22,7 @@
 5. `pose = PoseStamped()`
    - `pose.header.frame_id = self.get_parameter('frame_id').value`
    - `pose.pose.orientation.x, pose.pose.orientation.y, pose.pose.orientation.z, pose.pose.orientation.w = q`
-6.  `import tf_transformations as tft`
+6. `import tf_transformations as tft`
    - https://github.com/DLu/tf_transformations/blob/main/tf_transformations/__init__.py
    - `tft.quaternion_from_euler(*rpy)`
      - https://github.com/DLu/tf_transformations/blob/main/tf_transformations/__init__.py#L745
