@@ -1,13 +1,16 @@
 # timer_log.py
 
 1. `from rclpy.node import Node`
-2. `self.create_timer(0.5, self.tick)`
+2. `super().__init__('heartbeat')`
+   - Node 클래스의 init 함수에서 node name 을 반드시 받도록 정의됨
+      - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/node.py#L127
+4. `self.create_timer(0.5, self.tick)`
    - rclpy.node.Node 의 `create_timer(timer_period_sec, callback, callback_group=None, clock=None)` 함수
      - https://docs.ros2.org/foxy/api/rclpy/api/node.html
-3. `self.get_logger().info(f'beat {self.count}')`
+5. `self.get_logger().info(f'beat {self.count}')`
    - rclpy.node.Node 의 `get_logger()` 함수
      - https://docs.ros2.org/foxy/api/rclpy/api/node.html
-4. `rclpy.init(); rclpy.spin(Heartbeat()); rclpy.shutdown()`
+6. `rclpy.init(); rclpy.spin(Heartbeat()); rclpy.shutdown()`
    - https://docs.ros2.org/foxy/api/rclpy/api/init_shutdown.html
    - `rclpy.init(*, args=None, context=None)`
    - `rclpy.spin(node, executor=None)`
