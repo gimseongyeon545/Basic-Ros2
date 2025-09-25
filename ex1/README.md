@@ -12,7 +12,7 @@
       - https://docs.ros2.org/foxy/api/rclpy/api/node.html
    - 반환: RcutilsLogger class
       - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/node.py#L385
-   - RcutilsLogger class
+   - RcutilsLogger class 의 info() func
       - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/impl/rcutils_logger.py#L418
 6. `rclpy.init(); rclpy.spin(Heartbeat()); rclpy.shutdown()`
    - https://docs.ros2.org/foxy/api/rclpy/api/init_shutdown.html
