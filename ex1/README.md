@@ -1,3 +1,5 @@
+# timet_log.py
+
 1. `from rclpy.node import Node`
 2. `self.create_timer(0.5, self.tick)`
    - rclpy.node.Node 의 `create_timer(timer_period_sec, callback, callback_group=None, clock=None)` 함수
