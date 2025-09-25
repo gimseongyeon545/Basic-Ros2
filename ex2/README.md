@@ -7,7 +7,10 @@
    - `('target_xyz', [0.40, 0.20, 0.12]),
             ('target_rpy', [0.0, math.pi, 0.0]),  # 수직 하향
             ('frame_id', 'base_link')`
-     - xyz & rpy: 
+     - xyz & rpy
+       - xyz: base frame (ex: base_link) 에서 본 end-effector position
+       - rpy: xyz position 에 있는 end-effector 의 orientation (Roll(φ)/Pitch(θ)/Yaw(ψ) = x/y/z axis)
+         > <img width="560" height="492" alt="image" src="https://github.com/user-attachments/assets/5d364bc4-fd58-4858-b5bc-8fff08ee5a29" />
      - frame_id: 
 3. `self.create_publisher(PoseStamped, '/target_pose', 10)`
    - https://docs.ros2.org/foxy/api/rclpy/api/node.html#rclpy.node.Node.create_publisher
