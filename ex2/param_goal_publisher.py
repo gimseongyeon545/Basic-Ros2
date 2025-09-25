@@ -21,6 +21,7 @@ class GoalPublisher(Node):
         pose = PoseStamped()
         pose.header.frame_id = self.get_parameter('frame_id').value
         pose.pose.position.x, pose.pose.position.y, pose.pose.position.z = xyz
+        
         # 간단: RPY→quat 대충(roll=0, pitch=π, yaw=0)
         import tf_transformations as tft
         q = tft.quaternion_from_euler(*rpy)
