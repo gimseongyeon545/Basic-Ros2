@@ -6,10 +6,10 @@
       - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/node.py#L127
 4. `self.create_timer(0.5, self.tick)`
    - rclpy.node.Node 의 `create_timer(timer_period_sec, callback, callback_group=None, clock=None)` 함수
-     - https://docs.ros2.org/foxy/api/rclpy/api/node.html
+     - https://docs.ros2.org/foxy/api/rclpy/api/node.html#rclpy.node.Node.create_timer
 5. `self.get_logger().info(f'beat {self.count}')`
    - rclpy.node.Node 의 `get_logger()` 함수
-      - https://docs.ros2.org/foxy/api/rclpy/api/node.html
+      - https://docs.ros2.org/foxy/api/rclpy/api/node.html#rclpy.node.Node.get_logger
    - 반환: RcutilsLogger class
       - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/node.py#L385
    - RcutilsLogger class 의 info() func
