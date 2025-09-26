@@ -11,6 +11,8 @@
        - xyz: base frame (ex: base_link) 에서 본 end-effector position
        - rpy: xyz position 에 있는 end-effector 의 orientation (Roll(φ)/Pitch(θ)/Yaw(ψ) = x/y/z axis)
          > <img width="560" height="492" alt="image" src="https://github.com/user-attachments/assets/5d364bc4-fd58-4858-b5bc-8fff08ee5a29" />
+         > <img width="916" height="932" alt="image" src="https://github.com/user-attachments/assets/d4b1fb45-33c1-4eea-94e1-6046b6c17496" />
+
      - frame_id: 
 3. `self.create_publisher(PoseStamped, '/target_pose', 10)`
    - https://docs.ros2.org/foxy/api/rclpy/api/node.html#rclpy.node.Node.create_publisher
