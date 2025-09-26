@@ -10,7 +10,7 @@
      - xyz & rpy
        - xyz: base frame (ex: base_link) 에서 본 end-effector position
        - rpy: xyz position 에 있는 end-effector 의 orientation (Roll(φ)/Pitch(θ)/Yaw(ψ) = x/y/z axis)
-         > <img width="300" height="150" alt="image" src="https://github.com/user-attachments/assets/5d364bc4-fd58-4858-b5bc-8fff08ee5a29" />
+         > <img width="300" height="200" alt="image" src="https://github.com/user-attachments/assets/5d364bc4-fd58-4858-b5bc-8fff08ee5a29" />
          > <img width="300" height="250" alt="image" src="https://github.com/user-attachments/assets/d4b1fb45-33c1-4eea-94e1-6046b6c17496" />
 
      - frame_id: 
