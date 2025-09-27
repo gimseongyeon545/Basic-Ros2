@@ -1,6 +1,7 @@
 # param_goal_publisher.py
 1. `from geometry_msgs.msg import PoseStamped`
    - https://docs.ros.org/en/noetic/api/geometry_msgs/html/msg/PoseStamped.html
+   - stamp(시점) 와 `frame_id` 에서의 pose 를 담은 message
 
 </br>
 
