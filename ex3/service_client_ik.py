@@ -18,11 +18,14 @@ class IKClient(Node):
         req.ik_request.ik_link_name = 'end_effector_link'
         req.ik_request.attempts = 5
         req.ik_request.timeout.sec = 2
+        
         target = PoseStamped()
         target.header.frame_id = 'base_link'
         target.pose.position.x, target.pose.position.y, target.pose.position.z = (0.4, 0.2, 0.12)
         target.pose.orientation.w = 1.0
+        
         req.ik_request.pose_stamped = target
+        
         future = self.cli.call_async(req)
         rclpy.spin_until_future_complete(self, future)
         res = future.result()
