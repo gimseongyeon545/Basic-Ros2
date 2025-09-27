@@ -24,7 +24,8 @@
    - GetPositionIK service 를 제공하는 server 에 request 하는 client 생성
      - server: moveit 의 move_group -> move_group node 를 띄우면 /compute_ik 라는 GetPositionIK service 를 제공
    - `while not self.cli.wait_for_service(timeout_sec=1.0):`
-     - 
+     - 반환된 Client class 객체의 `wait_for_service` 함수
+       - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/client.py#L180
    - `future = self.cli.call_async(req)`
      - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/client.py#L120
        > `def call_async(self, request: SrvRequestT) -> Future[SrvResponseT]:`
@@ -87,9 +88,10 @@
             f'joints={len(res.solution.joint_state.name)} | '
             f'names={list(res.solution.joint_state.name)}'
         )`
-     - 꺼낸 응답 메세지 res 가 
+     - 꺼낸 응답 메세지 res 가 `moveit_msgs.srv.GetPositionIK.Response`
+       - https://docs.ros.org/en/noetic/api/moveit_msgs/html/srv/GetPositionIK.html
 
 </br>
 
 3. `target.pose.orientation.w = 1.0`
-   - default
+   - x, y, z 는 default 0, 0, 0
