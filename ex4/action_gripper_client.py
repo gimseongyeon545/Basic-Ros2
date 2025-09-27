@@ -25,14 +25,19 @@ class Gripper(Node):
         goal = GripperCommand.Goal()
         goal.command.position = position
         goal.command.max_effort = 40.0
+        
         goal_future = self.ac.send_goal_async(goal)
         rclpy.spin_until_future_complete(self, goal_future, timeout_sec=5.0)
         goal_handle = goal_future.result()
+        
         if not goal_handle or not goal_handle.accepted:
             self.get_logger().warn(f'goal rejected: pos={position}'); return
+        
         result_future = goal_handle.get_result_async()
+        
         rclpy.spin_until_future_complete(self, result_future, timeout_sec=10.0)
         result = result_future.result()
+        
         self.get_logger().info(f'goal done: pos={position}, status={getattr(result, "status", None)}')
 
 def main():
