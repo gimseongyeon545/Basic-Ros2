@@ -50,6 +50,7 @@
                 - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/task.py#L132
           ```
         - 반환: **status(action_msgs.msg.GoalStatus), result(control_msgs.action.GripperCommand.Result)**
+          - `self.get_logger().info(f'goal done: pos={position}, status={getattr(result, "status", None)}')`
 
 </br>
 
