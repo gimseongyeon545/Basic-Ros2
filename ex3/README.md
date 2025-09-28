@@ -91,7 +91,7 @@
             f'names={list(res.solution.joint_state.name)}'
         )`
      - 꺼낸 응답 메세지 res 가 `moveit_msgs.srv.GetPositionIK.Response`
-       - https://docs.ros.org/en/noetic/api/moveit_msgs/html/srv/GetPositionIK.html
+       - https://docs.ros.org/en/noetic/api/moveit_msgs/html/srv/GetPositionIK.html 
 
 </br>
 
