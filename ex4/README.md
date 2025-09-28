@@ -33,8 +33,7 @@
    - [2] `result_future = goal_handle.get_result_async()`
      - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/action/client.py#L155
      - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/action/client.py#L620
-       > `def _get_result_async(self, goal_handle: ClientGoalHandle[GoalT, ResultT, FeedbackT]
-                          ) -> Future[GetResultServiceResponse[ResultT]]:`
+       > `def _get_result_async(self, goal_handle: ClientGoalHandle[GoalT, ResultT, FeedbackT]) -> Future[GetResultServiceResponse[ResultT]]:`
      - `rclpy.spin_until_future_complete(self, result_future, timeout_sec=10.0)`
      - `result = result_future.result()`
        - (ex3 ref.) [8] 에서 goal
