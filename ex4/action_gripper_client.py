@@ -34,7 +34,6 @@ class Gripper(Node):
             self.get_logger().warn(f'goal rejected: pos={position}'); return
         
         result_future = goal_handle.get_result_async()
-        
         rclpy.spin_until_future_complete(self, result_future, timeout_sec=10.0)
         result = result_future.result()
         
