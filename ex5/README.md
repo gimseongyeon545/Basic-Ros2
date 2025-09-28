@@ -74,4 +74,12 @@
        subscribes /pose_in_base
     ```
 4. `import tf2_geometry_msgs`
-5. `from rclpy.duration import Duration`
+   - transform 함수에서 들어온 메세지 타입을 변환msg로 매핑하는 부분
+     - https://github.com/ros2/geometry2/blob/rolling/tf2_ros_py/tf2_ros/buffer_interface.py#L97
+       > `do_transform = self.registration.get(type(object_stamped))`
+       - 등록해둔 변환 함수 꺼냄
+         - 등록된 변환함수는 tf2_geometry_msgs 의 함수들
+           - https://github.com/ros2/geometry2/blob/rolling/tf2_geometry_msgs/src/tf2_geometry_msgs/tf2_geometry_msgs.py#L373
+5. `from rclpy.duration import Duration` & `Duration(seconds=0.2)`
+   - https://github.com/ros2/rclpy/blob/master/rclpy/rclpy/duration.py#L22
+     > `def __init__(self, *, seconds: Union[int, float] = 0, nanoseconds: int = 0):`
