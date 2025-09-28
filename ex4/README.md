@@ -50,6 +50,10 @@
           ```
         - 반환: **status(action_msgs.msg.GoalStatus), result(control_msgs.action.GripperCommand.Result)**
           - `self.get_logger().info(f'goal done: pos={position}, status={getattr(result, "status", None)}')`
+          - `result = result_future.result()` 에서 .result, .status field
+            - `.result.stalled` 등
+              - https://docs.ros.org/en/noetic/api/control_msgs/html/action/GripperCommand.html
+            - `.result.status`: 0 UNKNOWN / 1 ACCEPTED / 2 EXECUTING / 3 CANCELING / 4 SUCCEEDED / 5 CANCELED / 6 ABORTED
 
 </br>
 
