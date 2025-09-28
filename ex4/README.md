@@ -8,7 +8,7 @@
    - `if not self.ac.wait_for_server(timeout_sec=0.0):`
      - https://docs.ros2.org/foxy/api/rclpy/api/actions.html#rclpy.action.client.ActionClient.wait_for_server
      - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/action/client.py#L659
-   [1] `goal_future = self.ac.send_goal_async(goal)`
+   - [1] `goal_future = self.ac.send_goal_async(goal)`
      - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/action/client.py#L485https://docs.ros2.org/foxy/api/rclpy/api/actions.html#rclpy.action.client.ActionClient.send_goal_async
        > `send_goal_async(goal, feedback_callback=None, goal_uuid=None)`
      - Send a goal and asynchronously get the result.
@@ -30,7 +30,7 @@
         - 반환: **rclpy.action.client.ClientGoalHandle**
      - `if not goal_handle or not goal_handle.accepted:` (accepted property)
         - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/action/client.py#L119
-   [2] `result_future = goal_handle.get_result_async()`
+   - [2] `result_future = goal_handle.get_result_async()`
      - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/action/client.py#L155
      - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/action/client.py#L620
        > `def _get_result_async(self, goal_handle: ClientGoalHandle[GoalT, ResultT, FeedbackT]
