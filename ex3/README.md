@@ -68,21 +68,23 @@
                   handler, (entity, self._guard, self._is_shutdown, self._work_tracker),
                   executor=self)` & `return task`
       
-         [7] Task 객체 반환 시 Task class 의 `__init___` 을 자동 호출
-            - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/task.py#L249
+        [7] Task 객체 반환 시 Task class 의 `__init___` 을 자동 호출
+        - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/task.py#L249
          
-         [8] _spin_once_impl 에서 wait_for_ready_callbacks 실행하여 Task 객체 만든 후 handler() 실행하여 Task 객체의 __call__ 실행
-            - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/task.py#L280
-               - __call__ 에서 `set_result` 함수 호출
-         [9] `set_result`
-            - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/task.py#L125
-            =>  `self._result = result` (Task 객체의 self._result)
+        [8] async def handler 실행
+        - 대기 중인 coroutine 확보
+           - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/executors.py#L603
+        - await call_coroutine()
+           - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/executors.py#L611
+           - service response 의 set_result 호출은 executors.py 의 async def _execute 함수에서 호출됨
+              - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/executors.py#L522
+              - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/task.py#L132
         ```
    - `res = future.result()`
      - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/task.py#L103
      - 반환: `return self._result`
        - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/task.py#L19
-     - Future class 의 self._result 이지만 Future class 를 상속하는 Task 클래스의 self._result 사용 
+     
    - `self.get_logger().info(
             f'IK error_code={res.error_code.val} | '
             f'joints={len(res.solution.joint_state.name)} | '
