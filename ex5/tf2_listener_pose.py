@@ -10,8 +10,8 @@ class PoseXform(Node):
     def __init__(self):
         super().__init__('pose_xform')
         self.buf = Buffer(); self.tl = TransformListener(self.buf, self)
-        self.sub = self.create_subscription(PoseStamped, '/pose_in_camera', self.cb, 10)
-        self.pub = self.create_publisher(PoseStamped, '/pose_in_base', 10)
+        self.sub = self.create_subscription(PoseStamped, '/pose_in_camera', self.cb, 10) # 환경에 맞게
+        self.pub = self.create_publisher(PoseStamped, '/pose_in_base', 10) # 환경에 맞게
 
     def cb(self, msg):
         try:
