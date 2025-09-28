@@ -1,8 +1,8 @@
 # 06_tf2_static_broadcaster.py
 import rclpy
 from rclpy.node import Node
-from geometry_msgs.msg import TransformStamped
 from tf2_ros import StaticTransformBroadcaster
+from geometry_msgs.msg import TransformStamped
 import math
 
 class StaticTF(Node):
