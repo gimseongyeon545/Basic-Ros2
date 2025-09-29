@@ -40,7 +40,7 @@
        - `msg.k`: msg 가 CameraInfo type 이고, k field 를 이용하여 3*3 카메라 내재행렬 (cameraintrinsic matrix) 을 self.K 에 저장
          - 내재 행렬: 픽셀 좌표, 카메라 좌표 변환
            - `fx, fy, cx, cy = self.K[0,0], self.K[1,1], self.K[0,2], self.K[1,2]`
-           > <img width="191" height="91" alt="image" src="https://github.com/user-attachments/assets/ddedbf59-a762-4c71-870e-41eca7b440ce" />
+             > <img width="100" height="60" alt="image" src="https://github.com/user-attachments/assets/ddedbf59-a762-4c71-870e-41eca7b440ce" />
    - `self.create_subscription(Image, '/aligned_depth_to_color/image_raw', self.depth_cb, 10)`
      - 위와 동일
 4. `self.get_logger().info(f'center 3D = ({x:.3f}, {y:.3f}, {z:.3f}) m')`
