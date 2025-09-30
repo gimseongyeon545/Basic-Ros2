@@ -2,6 +2,39 @@
 1. `from geometry_msgs.msg import PoseStamped`
 2. `from moveit_msgs.msg import PlanningScene, CollisionObject`
    - `self.pub = self.create_publisher(PlanningScene, '/planning_scene', 10)`
+     - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/node.py#L1560
+       > `def create_publisher(
+        self,
+        msg_type: Type[MsgT],
+        topic: str,
+        qos_profile: Union[QoSProfile, int],
+        *,
+        callback_group: Optional[CallbackGroup] = None,
+        event_callbacks: Optional[PublisherEventCallbacks] = None,
+        qos_overriding_options: Optional[QoSOverridingOptions] = None,
+        publisher_class: Type[Publisher[MsgT]] = Publisher,
+    ) -> Publisher[MsgT]:`
+   - `ps = PlanningScene()` & `ps.is_diff = True`
+     - https://docs.ros.org/en/noetic/api/moveit_msgs/html/msg/PlanningScene.html
+   - `ps.world.collision_objects.append(co)`
+     - https://docs.ros.org/en/noetic/api/moveit_msgs/html/msg/PlanningSceneWorld.html
+     - https://docs.ros.org/en/noetic/api/moveit_msgs/html/msg/CollisionObject.html
+   - `ps.robot_state.is_diff = True`
+     - https://docs.ros.org/en/noetic/api/moveit_msgs/html/msg/RobotState.html
+   
+   </br>
+   
+   - `co = CollisionObject()`
+     - https://docs.ros.org/en/noetic/api/moveit_msgs/html/msg/CollisionObject.html
+     - `co.id = 'obstacle_box'`
+     - `co.header.frame_id = 'base_link'`
+       - https://docs.ros.org/en/noetic/api/std_msgs/html/msg/Header.html
+     - `co.primitives.append(box)`
+       - https://docs.ros.org/en/noetic/api/shape_msgs/html/msg/SolidPrimitive.html
+     - `co.primitive_poses.append(pose.pose)`
+       - https://docs.ros.org/en/noetic/api/geometry_msgs/html/msg/Pose.html
+     - `co.operation = CollisionObject.ADD`
+       - https://docs.ros.org/en/noetic/api/moveit_msgs/html/msg/CollisionObject.html
 3. `self.timer = self.create_timer(0.5, self.tick)`
    - https://docs.ros2.org/foxy/api/rclpy/api/node.html#rclpy.node.Node.create_timer
      > `create_timer(timer_period_sec, callback, callback_group=None, clock=None)`
@@ -53,4 +86,6 @@
                 - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/executors.py#L130
        ```
 4. `from shape_msgs.msg import SolidPrimitive`
-5. `from builtin_interfaces.msg import Time` 
+   - https://docs.ros2.org/foxy/api/shape_msgs/msg/SolidPrimitive.html
+   - `box.type = SolidPrimitive.BOX`
+   - `box.dimensions = [0.10, 0.10, 0.10]`
