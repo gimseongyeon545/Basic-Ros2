@@ -59,6 +59,8 @@
         - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/executors.py#L641C9-L641C34
         - cliient for문
            - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/executors.py#L850
+           - _make_handler 에서 호출하는 함수는 `_take_clilent`
+              - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/executors.py#L853
 
         [6] _make_handler
         - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/executors.py#L575
@@ -67,20 +69,23 @@
         - return: `task: Task[None] = Task(
                   handler, (entity, self._guard, self._is_shutdown, self._work_tracker),
                   executor=self)` & `return task`
-      
-        [7] Task 객체 반환 시 Task class 의 `__init___` 을 자동 호출
-        - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/task.py#L249
-         
-        [8] async def handler 실행
-        - `_spin_once_impl` 로 다시 와서 handler() func 실행
-          - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/executors.py#L934
-        - 대기 중인 coroutine 확보
-           - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/executors.py#L603
-        - await call_coroutine()
-           - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/executors.py#L611
-           - service response 의 set_result 호출은 executors.py 의 async def _execute 함수에서 호출됨
-              - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/executors.py#L522
-              - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/task.py#L132
+        [7] `_spin_once_impl` 로 다시 와서 handler() func 실행
+               - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/executors.py#L934
+        - 받는 인자가 entity, node, take_from_wait_list
+           > `def _make_handler(
+                  self,
+                  entity: 'EntityT',
+                  node: 'Node',
+                  take_from_wait_list: Callable[['EntityT'],
+                                                Optional[Callable[[], Coroutine[None, None, None]]]],
+                  ) -> Task[None]:`
+        -  위 `handler = self._make_handler(client, node, self._take_client)`에서 호출한대로 인자 받고 `call_coroutine = take_from_wait_list(entity)`
+            - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/executors.py#L853
+            - `take_from_wait_list(entity)` 는 `self._take_client(client)` 을 실행
+          - `_take_client`
+            - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/executors.py#L504
+            - `set_result` 함수 호출 부분
+               - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/executors.py#L522
         ```
    - `res = future.result()`
      - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/task.py#L103
