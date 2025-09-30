@@ -72,6 +72,8 @@
         - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/task.py#L249
          
         [8] async def handler 실행
+        - `_spin_once_impl` 로 다시 와서 handler() func 실행
+          - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/executors.py#L934
         - 대기 중인 coroutine 확보
            - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/executors.py#L603
         - await call_coroutine()
