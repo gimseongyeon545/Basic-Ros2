@@ -14,26 +14,26 @@
         qos_overriding_options: Optional[QoSOverridingOptions] = None,
         publisher_class: Type[Publisher[MsgT]] = Publisher,
     ) -> Publisher[MsgT]:`
-   - `ps = PlanningScene()` & `ps.is_diff = True`
+   - `ps = PlanningScene()` & `ps.is_diff = True` -> moveit 이 쓰는 장면 container 생성하되, 부분 업데이트 (`is_diff = True)`
      - https://docs.ros.org/en/noetic/api/moveit_msgs/html/msg/PlanningScene.html
-   - `ps.world.collision_objects.append(co)`
+   - `ps.world.collision_objects.append(co)` -> container 의 collision_objects 리스트 안에 co 라는 장애물 추가
      - https://docs.ros.org/en/noetic/api/moveit_msgs/html/msg/PlanningSceneWorld.html
      - https://docs.ros.org/en/noetic/api/moveit_msgs/html/msg/CollisionObject.html
-   - `ps.robot_state.is_diff = True`
+   - `ps.robot_state.is_diff = True` -> robot_state 에서 변경되는 부분만 적용하도록
      - https://docs.ros.org/en/noetic/api/moveit_msgs/html/msg/RobotState.html
    
    </br>
    
-   - `co = CollisionObject()`
+   - `co = CollisionObject()` -> 충돌 가능한 물체 정의
      - https://docs.ros.org/en/noetic/api/moveit_msgs/html/msg/CollisionObject.html
      - `co.id = 'obstacle_box'`
      - `co.header.frame_id = 'base_link'`
        - https://docs.ros.org/en/noetic/api/std_msgs/html/msg/Header.html
-     - `co.primitives.append(box)`
+     - `co.primitives.append(box)` -> 기하 모양 (SolidPrimitive: BOX, SPHERE, CYLINDERM, CONE) 추가
        - https://docs.ros.org/en/noetic/api/shape_msgs/html/msg/SolidPrimitive.html
-     - `co.primitive_poses.append(pose.pose)`
+     - `co.primitive_poses.append(pose.pose)` -> box 의 위치
        - https://docs.ros.org/en/noetic/api/geometry_msgs/html/msg/Pose.html
-     - `co.operation = CollisionObject.ADD`
+     - `co.operation = CollisionObject.ADD` -> box 를 추가 (MOVE: 기존 물체 POSE 만 변경 / REMOVE: 기존 물체 삭제)
        - https://docs.ros.org/en/noetic/api/moveit_msgs/html/msg/CollisionObject.html
 3. `self.timer = self.create_timer(0.5, self.tick)`
    - https://docs.ros2.org/foxy/api/rclpy/api/node.html#rclpy.node.Node.create_timer
@@ -87,5 +87,6 @@
        ```
 4. `from shape_msgs.msg import SolidPrimitive`
    - https://docs.ros2.org/foxy/api/shape_msgs/msg/SolidPrimitive.html
+   - `box = SolidPrimitive()`
    - `box.type = SolidPrimitive.BOX`
    - `box.dimensions = [0.10, 0.10, 0.10]`
