@@ -1,8 +1,11 @@
 # action_gripper_client.py
 1. `from rclpy.action import ActionClient`
    - https://docs.ros2.org/foxy/api/rclpy/api/actions.html
-   - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/action/client.py#L165
      > `rclpy.action.client.ActionClient(node, action_type, action_name, *,)`
+   - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/action/client.py#L165
+     > `class ActionClient(Generic[GoalT, ResultT, FeedbackT],
+                   Waitable['ClientGoalHandleDict[ResultT, FeedbackT]']):`
+     - Waitable class 객체 -> `node.waitables`
    - `self.ac = ActionClient(self, GripperCommand, '/gripper_controller/gripper_cmd')`
      - action name 은 `ros2 action list -t` 확인
    - `if not self.ac.wait_for_server(timeout_sec=0.0):`
@@ -15,17 +18,21 @@
      - 반환: `return future` & `future: Future[ClientGoalHandle[GoalT, ResultT, FeedbackT]] = Future()`
      - `rclpy.spin_until_future_complete(self, goal_future, timeout_sec=5.0)`
      - `goal_handle = goal_future.result()`
-        - (ex3 ref.) [8] 에서 goal
+        - (ex3 ref.)
           ```
-          [8] async def handler 실행
-          - 대기 중인 coroutine 확보
-             - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/executors.py#L603
-          - await call_coroutine()
-             - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/executors.py#L611
-             - ActionClient.execute() 에서 pending dict (call_async 에서 반환됨) 를 참고하고 나온 request 를 set_result 함수로 self._result 에 값을 넣어줌
-                - `self._pending_goal_requests[sequence_number].set_result(goal_handle)`
-                - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/action/client.py#L367
-                - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/task.py#L132
+          - 모두 동일하되, ActionClient 에서 `node.waitables` 이므로 `handler = self._make_handler(wt, node, self._take_waitable)` 
+             - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/executors.py#L821
+          - `call_coroutine = take_from_wait_list(entity)` 는 `_take_waitable(wt)`
+             - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/executors.py#L566
+          - set_result 는 `await waitable.execute(data)` 에서 Waitable class 의 execute 함수를 통해 실행되어야 하지만 추상이고, ActionClient 가 Waitable class 를 상속하므로 override 해서 ActionClient class 의 execute 함수를 사용
+             - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/executors.py#L572
+             - Waitable class 의 execute 함수
+                - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/waitable.py#L118
+             - ActionClient class
+                - `class ActionClient(Generic[GoalT, ResultT, FeedbackT],
+                   Waitable['ClientGoalHandleDict[ResultT, FeedbackT]']):`
+                - set_result 부분: `self._pending_goal_requests[sequence_number].set_result(goal_handle)`
+                   - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/action/client.py#L367
           ```
         - 반환: **rclpy.action.client.ClientGoalHandle**
      - `if not goal_handle or not goal_handle.accepted:` (accepted property)
