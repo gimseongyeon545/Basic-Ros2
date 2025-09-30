@@ -4,7 +4,6 @@ from rclpy.node import Node
 from geometry_msgs.msg import PoseStamped
 from moveit_msgs.msg import PlanningScene, CollisionObject
 from shape_msgs.msg import SolidPrimitive
-from builtin_interfaces.msg import Time
 
 class SceneBox(Node):
     def __init__(self):
