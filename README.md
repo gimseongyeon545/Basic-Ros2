@@ -52,7 +52,7 @@
           ],
      },
      ```
-   - `goal.py`
+   [1] `goal.py`
      - `def declare_parameters(
         self,
         namespace: str,
@@ -63,7 +63,35 @@
         ignore_override: bool = False
     ) -> List[Parameter[Any]]:`
        - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/node.py#L435
-   - `plan.py`
+   - `def create_publisher(
+        self,
+        msg_type: Type[MsgT],
+        topic: str,
+        qos_profile: Union[QoSProfile, int],
+        *,
+        callback_group: Optional[CallbackGroup] = None,
+        event_callbacks: Optional[PublisherEventCallbacks] = None,
+        qos_overriding_options: Optional[QoSOverridingOptions] = None,
+        publisher_class: Type[Publisher[MsgT]] = Publisher,
+    ) -> Publisher[MsgT]:`
+     - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/node.py#L1560
+   - `def create_timer(
+        self,
+        timer_period_sec: float,
+        callback: Optional[TimerCallbackType],
+        callback_group: Optional[CallbackGroup] = None,
+        clock: Optional[Clock] = None,
+        autostart: bool = True,
+    ) -> Timer:`
+     - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/node.py#L1826
+  - `rclpy.init()`
+    - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/__init__.py#L119
+  - PoseStamped
+    - https://docs.ros2.org/foxy/api/geometry_msgs/msg/PoseStamped.html
+    - header
+      - 
+    
+   [2] `plan.py`
 4. Command
    - [0] 공통
       ```
