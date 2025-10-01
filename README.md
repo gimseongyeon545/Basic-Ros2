@@ -54,6 +54,11 @@
      ```
    - `goal.py`
    - `plan.py`
-5. Result
+4. Command
+   [1] kortex bringup
+      ```
+      d
+      ``` 
+6. Result
    - Simulation (with rviz2)
    - Video (Physical Robot)
