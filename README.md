@@ -55,10 +55,32 @@
    - `goal.py`
    - `plan.py`
 4. Command
+
+   </br>
+   
+   [0] 공통
+      ```
+      export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+      export ROS_DOMAIN_ID=1
+      
+      cd ~/ks
+      colcon build
+      source install/setup.bash
+      ```
    [1] kortex bringup
       ```
-      d
-      ``` 
+      ros2 launch kortex_bringup gen3_lite.launch.py \
+        robot_ip:=192.168.1.10
+      ```
+   [2] goal node
+      ```
+      ros2 run gen3_lite_pickplace goal
+      ```
+   [3] plan node
+      ```
+      ros2 run gen3_lite_pickplace plan
+      ```
+   
 6. Result
    - Simulation (with rviz2)
    - Video (Physical Robot)
