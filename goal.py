@@ -11,21 +11,35 @@ from tf_transformations import quaternion_from_euler
 
 
 class GoalPublisher(Node):
-    init:
+    def __init__(self):
         super().__init__('goal_pub')
-        declare parameters: frame_id, target_xyz, target_rpy
-        create publisher: PoseStamped -> /target_pose
-        create timer(period=1.0, callback=publish_once)
+        self.declare_parameters('frame_id', ('base_link'))
+        self.declare_parameters('target_xyz', (0, 0, 0))
+        self.declare_parameters('target_rpy', (1.75, 0, -1.75))
 
-    publish_once():
-        read params -> xyz, rpy
-        build PoseStamped with header.stamp = now, header.frame_id = frame_id
-        convert rpy -> quaternion
-        set pose.position & pose.orientation
-        publish(/target_pose)
-        (optional) log a short line
+        self.pub = self.create_publisher('PoseStamped', '/target_pose')
 
-main():
-    rclpy.init
-    spin(GoalPublisher)
-    shutdown
+        self.timer = self.create_timer(1.0, self.publish_once)
+
+    def publish_once(self):
+        x, y, z = self.get_parameter('target_xyz')
+        r, p, y = self.get_parameter('target_rpy')
+
+        pose = PoseStamped()
+        pose.header.stamp = 
+        pose.header.frame_id = 
+        
+        self.quaternion_from_euler
+
+        pose.position.x, pose.position.y, pose.position.z = x, y, z
+        pose.orientation.
+
+        self.pub.publish(
+
+        logger
+    
+
+def main():
+    rclpy.init()
+    rclpy.spin(GoalPublisher)
+    rclpy.shutdown()
