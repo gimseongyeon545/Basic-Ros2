@@ -53,6 +53,16 @@
      },
      ```
    - `goal.py`
+     - `def declare_parameters(
+        self,
+        namespace: str,
+        parameters: Sequence[Union[
+            Tuple[str],
+            Tuple[str, ParameterInput],
+            Tuple[str, ParameterInput, ParameterDescriptor]]],
+        ignore_override: bool = False
+    ) -> List[Parameter[Any]]:`
+       - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/node.py#L435
    - `plan.py`
 4. Command
    - [0] 공통
