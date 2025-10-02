@@ -120,7 +120,7 @@
         content_filter_options: Optional[ContentFilterOptions] = None
     ) -> Subscription[MsgT]:`
      - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/node.py#L1665
-  - `def create_client(
+   - `def create_client(
         self,
         srv_type: Type[Srv],
         srv_name: str,
@@ -128,7 +128,7 @@
         qos_profile: QoSProfile = qos_profile_services_default,
         callback_group: Optional[CallbackGroup] = None
     ) -> Client[SrvRequestT, SrvResponseT]:`
-    - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/node.py#L1746
+     - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/node.py#L1746
 5. Command
    - [0] 공통
       ```
