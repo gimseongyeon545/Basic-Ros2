@@ -22,21 +22,24 @@ class GoalPublisher(Node):
         self.timer = self.create_timer(1.0, self.publish_once)
 
     def publish_once(self):
+        id = self.get_paramaeter('frame_id')
         x, y, z = self.get_parameter('target_xyz')
         r, p, y = self.get_parameter('target_rpy')
 
         pose = PoseStamped()
-        pose.header.stamp = 
-        pose.header.frame_id = 
+        pose.header.stamp = self.timer
+        pose.header.frame_id = id
         
-        self.quaternion_from_euler
+        qx, qy, qz, qw = self.quaternion_from_euler(r, p, y)
 
         pose.position.x, pose.position.y, pose.position.z = x, y, z
-        pose.orientation.
+        pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w = qx, qy, qz, qw
 
-        self.pub.publish(
+        self.pub.publish(pose)
 
-        logger
+        now = self.get_clock()
+        
+        self.get_logger().info(f'time:{now}')
     
 
 def main():
