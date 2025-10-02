@@ -46,8 +46,8 @@
      ```
      entry_points={
          'console_scripts': [
-            'goal = gen3_lite_pickplace:main',
-            'plan = gen3_lite_pickplace:main;,
+            'goal = gen3_lite_pickplace.goal:main',
+            'plan = gen3_lite_pickplace.plan:main;,
            
           ],
      },
