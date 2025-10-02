@@ -53,7 +53,7 @@
      },
      ```
    [1] `goal.py`
-     - `def declare_parameters(
+   - `def declare_parameters(
         self,
         namespace: str,
         parameters: Sequence[Union[
@@ -84,15 +84,29 @@
         autostart: bool = True,
     ) -> Timer:`
      - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/node.py#L1826
-  - `rclpy.init()`
-    - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/__init__.py#L119
-  - PoseStamped
-    - https://docs.ros2.org/foxy/api/geometry_msgs/msg/PoseStamped.html
-    - header
-      - 
+   - `def get_parameter(self, name: str) -> Parameter[Any]:`
+     - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/node.py#L716
+   - PoseStamped
+     - https://docs.ros2.org/foxy/api/geometry_msgs/msg/PoseStamped.html
+     - header
+       - https://docs.ros2.org/foxy/api/std_msgs/msg/Header.html
+     - pose
+       - https://docs.ros2.org/foxy/api/geometry_msgs/msg/Pose.html
+   - `def quaternion_from_euler(ai, aj, ak, axes='sxyz'):`
+     - https://github.com/DLu/tf_transformations/blob/main/tf_transformations/__init__.py#L745
+   - `def publish(self, msg: Union[MsgT, bytes]) -> None:`
+     - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/publisher.py#L62
+   - `def get_clock(self) -> Clock:`
+     - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/node.py#L382
+   - `def get_logger(self) -> RcutilsLogger:`
+     - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/node.py#L386
+     - .info()
+       - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/impl/rcutils_logger.py#L418
+   - `rclpy.init()`
+     - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/__init__.py#L119
     
    [2] `plan.py`
-4. Command
+5. Command
    - [0] 공통
       ```
       export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
