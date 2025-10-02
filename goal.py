@@ -13,9 +13,9 @@ from tf_transformations import quaternion_from_euler
 class GoalPublisher(Node):
     def __init__(self):
         super().__init__('goal_pub')
-        self.declare_parameters('frame_id', ('base_link'))
-        self.declare_parameters('target_xyz', (0, 0, 0))
-        self.declare_parameters('target_rpy', (1.75, 0, -1.75))
+        self.declare_parameter('frame_id', 'base_link')
+        self.declare_parameter('target_xyz', [0, 0, 0])
+        self.declare_parameter('target_rpy', [1.75, 0, -1.75])
 
         self.pub = self.create_publisher('PoseStamped', '/target_pose')
 
