@@ -11,12 +11,18 @@ from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 from control_msgs.action import FollowJointTrajectory
 from control_msgs.action import GripperCommand
 
-# (선택) IK 서비스가 필요하면
+# MoveIt services (IK + Cartesian path)
 from moveit_msgs.srv import GetPositionIK
+from moveit_msgs.srv import GetCartesianPath
 
-# (선택) TF 변환이 필요하면
+# (optional) MoveIt trajectory container
+from moveit_msgs.msg import RobotTrajectory
+
+# TF2 (frame checks / transforms)
 from tf2_ros import Buffer, TransformListener
 import tf2_geometry_msgs
+
+from builtin_interfaces.msg import Duration
 
 
 class Planner(Node):
@@ -29,15 +35,36 @@ class Planner(Node):
         self.create_client(GripperCommand, '/gripper_controller/gripper_cmd')
         self.create_client(GetPositionIK, '/compute_ik')
 
-        
-        
-        
-        (optional) tf2 Buffer/Listener for frame checks
-        set config params: group_name, eef_link, pre_grasp_offset_z, speed_scale, accel_scale
+        self.buf = Buffer()
+        self.listener = TransformListener(self.buf, )
 
-    def cb_target(self, PoseStamped):
-        pose_base = ensure frame is base_link (tf2 transform if needed)
-        pre_grasp = pose_base lifted by +pre_grasp_offset_z
+        self.declare_parameter('group_name', 'arm')
+        self.declare_paramter('ee_link', 'end_effector_link')
+        self.declare_paramter('pre_grasp_offset_z', 0.2)
+        self.declare_paramter('speed_scale', )
+        self.declare_paramter('accel_scale', )
+        
+
+    def cb_target(self, msg):
+        self.grasp = self.buf.transform(msg, 'base_link', timeout = Duration(seconds = 0.5))
+
+        self.pre_grasp_offset_z = self.get_parameter('pre_grasp_offset_z')
+        self.pre_grasp = self.grasp.copy()
+        self.pre_grasp.pose.position.z += self.pre_grasp_offset_z
+
+        self.group_name = self.get_paramter('group_name')
+        self.ee_link = self.get_paramter('end_effector_link')
+
+        self.req = GetCartesianPath.Request()
+        self.req.group_name = self.group_name
+        self.req.link_name = self.ee_link
+
+        self.req.waypoints = [self.pre_grasp.pose, self.grasp.pose] # approach_line
+
+        self.req.
+        
+        
+
         approach_line = straight-down segment from pre_grasp to grasp
         retreat_line  = straight-up segment back to pre_grasp
 
