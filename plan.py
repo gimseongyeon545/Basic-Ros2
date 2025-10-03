@@ -7,15 +7,18 @@ from rclpy.action import ActionClient
 from geometry_msgs.msg import PoseStamped
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 
-# actions (namespaces는 네 환경에 맞게 교체)
+# action: .wait_for_server() / .Goal().field
+# send goal: .send_goal_async(goal) -> .spin_until_future_complete() -> .result().field
+# get result: .get_result_async() -> .spin_until_future_complete() -> .result().field
 from control_msgs.action import FollowJointTrajectory
 from control_msgs.action import GripperCommand
 
 # MoveIt services (IK + Cartesian path)
+# service: create_client / .Request().field
 from moveit_msgs.srv import GetPositionIK
 from moveit_msgs.srv import GetCartesianPath
 
-# (optional) MoveIt trajectory container
+# MoveIt trajectory container
 from moveit_msgs.msg import RobotTrajectory
 
 # TF2 (frame checks / transforms)
@@ -27,83 +30,99 @@ from builtin_interfaces.msg import Duration
 
 class Planner(Node):
     def __init__(self):
-        super().__init__('planner')
+        super().__init__('planner_min')
 
-        sub = self.create_subscriber(PoseStmaped, '/target_pose', cb_target)
-
-        self.create_client(FollowJointTrajectory, '/arm_controller/follow_joint_trajcetory')
-        self.create_client(GripperCommand, '/gripper_controller/gripper_cmd')
-        self.create_client(GetPositionIK, '/compute_ik')
-
-        self.buf = Buffer()
-        self.listener = TransformListener(self.buf, )
-
+        # --- Params (set to your robot) ---
+        # planning frame + group/link names + ordered group joint list
+        self.declare_parameter('base_frame', 'base_link')
         self.declare_parameter('group_name', 'arm')
-        self.declare_paramter('ee_link', 'end_effector_link')
-        self.declare_paramter('pre_grasp_offset_z', 0.2)
-        self.declare_paramter('speed_scale', )
-        self.declare_paramter('accel_scale', )
-        
+        self.declare_parameter('ee_link', 'end_effector_link')
+        self.declare_parameter('group_joint_names', ['j1','j2','j3','j4','j5','j6'])
+        self.declare_parameter('move_time_sec', 3.0)   # simple duration for single-shot move
 
-    def cb_target(self, msg):
-        self.grasp = self.buf.transform(msg, 'base_link', timeout = Duration(seconds = 0.5))
+        # --- Subscriptions ---
+        self.sub_goal = self.create_subscription(PoseStamped, '/target_pose', self.cb_target, 10)
+        self.sub_js   = self.create_subscription(JointState,  '/joint_states', self.cb_js, 50)
+        self.last_js = None  # seed for IK
 
-        self.pre_grasp_offset_z = self.get_parameter('pre_grasp_offset_z')
-        self.pre_grasp = self.grasp.copy()
-        self.pre_grasp.pose.position.z += self.pre_grasp_offset_z
+        # --- Service client (IK) ---
+        self.cli_ik = self.create_client(GetPositionIK, '/compute_ik')
+        # wait_for_service(...)  # (do in real code)
 
-        self.group_name = self.get_paramter('group_name')
-        self.ee_link = self.get_paramter('end_effector_link')
+        # --- Action client (execute) ---
+        self.ac_arm = ActionClient(self, FollowJointTrajectory, '/arm_controller/follow_joint_trajectory')
+        # wait_for_server(...)  # (do in real code)
 
-        self.req = GetCartesianPath.Request()
-        self.req.group_name = self.group_name
-        self.req.link_name = self.ee_link
+        # --- TF2 ---
+        self.buf = Buffer()
+        self.tfl = TransformListener(self.buf, self)
 
-        self.req.waypoints = [self.pre_grasp.pose, self.grasp.pose] # approach_line
+        # state flag (avoid overlapping goals)
+        self.busy = False
 
-        self.req.
-        
-        
+    # --------------------
 
-        approach_line = straight-down segment from pre_grasp to grasp
-        retreat_line  = straight-up segment back to pre_grasp
+    def cb_js(self, msg: JointState):
+        # store latest joint state for IK seed
+        self.last_js = msg
 
-        # (옵션) IK:
-        #   call IK on pre_grasp to get seed joints
-        #   if fail -> retry a few times / slightly adjust yaw
+    # --------------------
 
-        # 1) plan joint trajectory for move to pre_grasp (via MoveIt OR simple IK+time-param)
-        jtraj_to_pre = self.plan_joint_trajectory(target=pre_grasp)
+    def cb_target(self, msg_in: PoseStamped):
+        if self.busy:
+            return  # drop or queue; keep minimal
 
-        # 2) execute trajectory
-        send FollowJointTrajectory goal with jtraj_to_pre, wait result
+        self.busy = True
 
-        # 3) approach (cartesian-like step): small linear descent
-        jtraj_approach = self.plan_or_synthesize_small_linear_segment(to=grasp)
-        execute it
+        # 0) normalize target to base_frame using TF (if frames differ)
+        # base_frame = get_param('base_frame')
+        # grasp = TF2 transform(msg_in -> base_frame) with timeout
+        # on TF failure: self.busy=False; return
 
-        # 4) close gripper
-        send GripperCommand(position=close, effort=...) and wait
+        # 1) build IK request for target EE pose
+        # req = GetPositionIK.Request()
+        # req.ik_request.group_name    = get_param('group_name')
+        # req.ik_request.ik_link_name  = get_param('ee_link')
+        # req.ik_request.pose_stamped  = grasp
+        # if self.last_js: req.ik_request.robot_state.joint_state = self.last_js
+        # call IK (call_async + spin_until_future_complete) -> res
 
-        # 5) retreat (linear up)
-        jtraj_retreat = self.plan_or_synthesize_small_linear_segment(to=pre_grasp)
-        execute it
+        # 2) extract joint positions in group order
+        # names_all  = res.solution.joint_state.name
+        # pos_all    = res.solution.joint_state.position
+        # group      = get_param('group_joint_names')  # ordered list
+        # q_target   = [pos_all[names_all.index(nm)] for nm in group]
+        # on failure/missing: self.busy=False; return
 
-        # (선택) move to place pose with same pattern
+        # 3) build minimal JointTrajectory (single point → controller interpolates)
+        # jt = JointTrajectory()
+        # jt.joint_names = group
+        # pt = JointTrajectoryPoint()
+        # pt.positions = q_target
+        # pt.time_from_start = Duration(sec=int(get_param('move_time_sec')))
+        # jt.points = [pt]
 
-    def plan_joint_trajectory(self, target_pose):
-        # Hint only:
-        # - if using MoveIt: request a plan (service/action) with constraints & speed scaling
-        # - otherwise: run IK -> build JointTrajectory with reasonable timing
-        return JointTrajectory
+        # 4) execute via FollowJointTrajectory action
+        # goal = FollowJointTrajectory.Goal()
+        # goal.trajectory = jt
+        # send_goal_async(...); wait; get_result_async(...); wait
+        # (check wrapped.status; log)
 
-    def execute_joint_trajectory(self, jtraj):
-        build FollowJointTrajectory.Goal from jtraj
-        send via ActionClient, wait for result, handle errors/timeouts
+        self.busy = False
 
-    def control_gripper(self, open_or_close):
-        build GripperCommand.Goal (position/effort)
-        send & wait
+    # --------------------
+
+    # (Optional) helper to read param quickly
+    # def get_param(self, name): return self.get_parameter(name).get_parameter_value().string_value / double_value / ...
+
+def main():
+    rclpy.init()
+    node = Planner()
+    rclpy.spin(node)
+    rclpy.shutdown()
+
+
+    
 
 def main():
     rclpy.init()
