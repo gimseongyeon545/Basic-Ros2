@@ -63,16 +63,6 @@ class PickPlaceMin(Node):
         place_down  = _offset_z(place, 0.0)
         place_up    = _offset_z(place, lift_h)
 
-        # sequence (open, move, close, lift, place, open)
-        _gripper(open_v)
-        _move_to_pose(pick_above, T)
-        _move_to_pose(pick_down,  T)
-        _gripper(close_v)
-        _move_to_pose(pick_lift,  T)
-        _move_to_pose(place_above,T)
-        _move_to_pose(place_down, T)
-        _gripper(open_v)
-        _move_to_pose(place_up,   T)
 
     # --- util ---
     function _to_base(pose, base_frame):
