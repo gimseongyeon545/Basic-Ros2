@@ -52,7 +52,7 @@
           ],
      },
      ```
-   [1] `goal.py`
+   [1] `plan.py`
    - `def declare_parameters(
         self,
         namespace: str,
@@ -105,7 +105,6 @@
    - `rclpy.init()`
      - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/__init__.py#L119
     
-   [2] `plan.py`
    
 5. Command
    - [0] 공통
@@ -122,13 +121,9 @@
       ros2 launch kortex_bringup gen3_lite.launch.py \
         robot_ip:=192.168.1.10
       ```
-   - [2] goal node
+   - [2] plan node
       ```
       ros2 run gen3_lite_pickplace goal
-      ```
-   - [3] plan node
-      ```
-      ros2 run gen3_lite_pickplace plan
       ```
    
 6. Result
