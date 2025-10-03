@@ -71,6 +71,7 @@ class PickPlaceMin(Node):
         except: warn and return original
 
     function _offset_z(pose, dz):
+        PoseStamped field
         copy pose
         pose.position.z += dz
         return pose
