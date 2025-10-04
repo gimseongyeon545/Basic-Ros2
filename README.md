@@ -125,10 +125,25 @@
      ros2 launch kinova_gen3_lite_moveit_config move_group.launch.py\
         publish_robot_description:=true
      ```
-   - [2] plan node
+   - [3] plan node
       ```
       ros2 run gen3_lite_pickplace plan
       ```
+   - [4]
+     ```
+     # pick
+   ros2 topic pub --once /pick_pose geometry_msgs/PoseStamped \
+   "{header: {frame_id: 'base_link'},
+     pose: {position: {x: 0.30, y: 0.00, z: 0.05},
+            orientation: {x: 0.0, y: 0.0, z: 0.0, w: 1.0}}}"
+      
+      # place
+      ros2 topic pub --once /place_pose geometry_msgs/PoseStamped \
+      "{header: {frame_id: 'base_link'},
+        pose: {position: {x: 0.40, y: -0.10, z: 0.05},
+               orientation: {x: 0.0, y: 0.0, z: 0.0, w: 1.0}}}"
+
+     ```
    
 7. Result
    - Simulation (with rviz2)
