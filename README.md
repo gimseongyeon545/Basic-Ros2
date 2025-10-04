@@ -132,16 +132,16 @@
    - [4]
      ```
      # pick
-   ros2 topic pub --once /pick_pose geometry_msgs/PoseStamped \
-   "{header: {frame_id: 'base_link'},
-     pose: {position: {x: 0.30, y: 0.00, z: 0.05},
-            orientation: {x: 0.0, y: 0.0, z: 0.0, w: 1.0}}}"
+      ros2 topic pub --once /pick_pose geometry_msgs/PoseStamped \
+      "{header: {frame_id: 'base_link'},
+        pose: {position: {x: 0.30, y: 0.00, z: 0.05},
+               orientation: {x: 0.0, y: 0.0, z: 0.0, w: 1.0}}}"
       
       # place
-      ros2 topic pub --once /place_pose geometry_msgs/PoseStamped \
-      "{header: {frame_id: 'base_link'},
-        pose: {position: {x: 0.40, y: -0.10, z: 0.05},
-               orientation: {x: 0.0, y: 0.0, z: 0.0, w: 1.0}}}"
+         ros2 topic pub --once /place_pose geometry_msgs/PoseStamped \
+         "{header: {frame_id: 'base_link'},
+           pose: {position: {x: 0.40, y: -0.10, z: 0.05},
+                  orientation: {x: 0.0, y: 0.0, z: 0.0, w: 1.0}}}"
 
      ```
    
