@@ -144,6 +144,105 @@
                   orientation: {x: 0.0, y: 0.0, z: 0.0, w: 1.0}}}"
 
      ```
+
+```
+- [0] 공통
+      ```
+      export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+      export ROS_DOMAIN_ID=2
+      
+      cd ~/ks
+      colcon build
+      source install/setup.bash
+      ```
+      
+      ros2 run realsense2_camera realsense2_camera_node --ros-args \
+  -p enable_color:=true -p enable_depth:=true \
+  -p pointcloud.enable:=true -p align_depth.enable:=true \
+  --log-level debug
+
+
+      
+   - [1] kortex bringup
+      ```
+      ros2 launch kortex_bringup gen3_lite.launch.py \
+        robot_ip:=192.168.1.10
+      ```
+   - [2] movegroup
+     ```
+     ros2 launch kinova_gen3_lite_moveit_config move_group.launch.py\
+        publish_robot_description:=true
+     ```
+     
+     ```
+     ros2 action send_goal /joint_trajectory_controller/follow_joint_trajectory \
+  control_msgs/action/FollowJointTrajectory \
+  "{trajectory: {
+      joint_names: [joint_1,joint_2,joint_3,joint_4,joint_5,joint_6],
+      points: [{positions: [1.4208193447, 0.0704470024, 1.8731641801, -2.0, -0.4543651094, 0.0349651746],
+       time_from_start: {sec: 10}}]}}"
+     ```
+     
+     
+   - [3] plan node
+      ```
+      ros2 run gen3_lite_pickplace plan
+      ```
+   - [4]
+   
+ ros2 service call /compute_ik moveit_msgs/srv/GetPositionIK "
+ik_request:
+  group_name: arm
+  ik_link_name: end_effector_link   # 네 환경의 tip 링크명으로
+  avoid_collisions: true
+  timeout: {sec: 1, nanosec: 0}
+  pose_stamped:
+    header: {frame_id: base_link}
+    pose:
+      position: {x: 0.40, y: 0.00, z: 0.157}
+      orientation: {x: 1.0, y: 0.0, z: 0.0, w: 0.0}
+  robot_state:
+    joint_state: {name: [], position: []}  # 빈 seed면 MoveIt이 알아서 현재 상태 사용
+"
+     ```
+     # pick (툴 아래, 약간 높게)
+     ros2 topic pub --once /pick_pose geometry_msgs/PoseStamped "
+header: {frame_id: base_link}
+pose:
+  position: {x: 0.40, y: 0.00, z: 0.157}
+  orientation: {x: 1.0, y: 0.0, z: 0.0, w: 0.0}
+"
+
+ros2 service call /compute_ik moveit_msgs/srv/GetPositionIK "
+ik_request:
+  group_name: arm
+  ik_link_name: end_effector_link   # 네 환경의 tip 링크명으로
+  avoid_collisions: true
+  timeout: {sec: 1, nanosec: 0}
+  pose_stamped:
+    header: {frame_id: base_link}
+    pose:
+      position: {x: 0.45, y: -0.15, z: 0.171}
+  orientation: {x: 1.0, y: 0.0, z: 0.0, w: 0.0}
+  robot_state:
+    joint_state: {name: [], position: []}  # 빈 seed면 MoveIt이 알아서 현재 상태 사용
+"
+
+
+
+
+
+	# place (비슷한 높이, y 쪽으로 약간 이동)
+ros2 topic pub --once /place_pose geometry_msgs/PoseStamped "
+header: {frame_id: base_link}
+pose:
+  position: {x: 0.45, y: -0.15, z: 0.171}
+  orientation: {x: 1.0, y: 0.0, z: 0.0, w: 0.0}
+"
+
+
+     ```
+```
    
 7. Result
    - Simulation (with rviz2)
