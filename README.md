@@ -123,7 +123,7 @@
       ```
    - [2] plan node
       ```
-      ros2 run gen3_lite_pickplace goal
+      ros2 run gen3_lite_pickplace plan
       ```
    
 6. Result
