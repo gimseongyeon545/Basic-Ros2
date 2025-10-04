@@ -45,11 +45,10 @@
    - /home/ubuntu_labtop_02/ks/src/gen3_lite_pickplace/setup.py
      ```
      entry_points={
-         'console_scripts': [
-            'goal = gen3_lite_pickplace.goal:main',
-            'plan = gen3_lite_pickplace.plan:main;,
+        'console_scripts': [
+           'plan = gen3_lite_pickplace.plan:main;,
            
-          ],
+        ],
      },
      ```
    [1] `plan.py`
