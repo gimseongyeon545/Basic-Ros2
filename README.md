@@ -120,11 +120,16 @@
       ros2 launch kortex_bringup gen3_lite.launch.py \
         robot_ip:=192.168.1.10
       ```
+   - [2] movegroup
+     ```
+     ros2 launch kinova_gen3_lite_moveit_config move_group.launch.py\
+        publish_robot_description:=true
+     ```
    - [2] plan node
       ```
       ros2 run gen3_lite_pickplace plan
       ```
    
-6. Result
+7. Result
    - Simulation (with rviz2)
    - Video (Physical Robot)
