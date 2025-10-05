@@ -1,8 +1,10 @@
 # PROJECT 1
-1. Project Content
+1. Project Contents
    - 임의의 목표 지점을 주면 ee의 목표 지점으로 할당하여, IK 를 계산하여 pick-place plannig 을 실행
    - moveit 으로 planning 계획하여 Simulation & Physical Robot 실행
-     - args 로 only-plan 이 아닐 경우만 Physical Robot 실행
+
+</br>
+
 2. Package Configuration
    - Package Name
      - `gen3_lite_pickplace`
@@ -41,7 +43,9 @@
          colcon build
          source install/setup.bash
          ```
-3. Code Description
+</br>
+
+3. setup.py
    - /home/ubuntu_labtop_02/ks/src/gen3_lite_pickplace/setup.py
      ```
      entry_points={
@@ -51,61 +55,10 @@
         ],
      },
      ```
-   [1] `plan.py`
-   - `def declare_parameters(
-        self,
-        namespace: str,
-        parameters: Sequence[Union[
-            Tuple[str],
-            Tuple[str, ParameterInput],
-            Tuple[str, ParameterInput, ParameterDescriptor]]],
-        ignore_override: bool = False
-    ) -> List[Parameter[Any]]:`
-       - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/node.py#L435
-   - `def create_publisher(
-        self,
-        msg_type: Type[MsgT],
-        topic: str,
-        qos_profile: Union[QoSProfile, int],
-        *,
-        callback_group: Optional[CallbackGroup] = None,
-        event_callbacks: Optional[PublisherEventCallbacks] = None,
-        qos_overriding_options: Optional[QoSOverridingOptions] = None,
-        publisher_class: Type[Publisher[MsgT]] = Publisher,
-    ) -> Publisher[MsgT]:`
-     - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/node.py#L1560
-   - `def create_timer(
-        self,
-        timer_period_sec: float,
-        callback: Optional[TimerCallbackType],
-        callback_group: Optional[CallbackGroup] = None,
-        clock: Optional[Clock] = None,
-        autostart: bool = True,
-    ) -> Timer:`
-     - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/node.py#L1826
-   - `def get_parameter(self, name: str) -> Parameter[Any]:`
-     - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/node.py#L716
-   - PoseStamped
-     - https://docs.ros2.org/foxy/api/geometry_msgs/msg/PoseStamped.html
-     - header
-       - https://docs.ros2.org/foxy/api/std_msgs/msg/Header.html
-     - pose
-       - https://docs.ros2.org/foxy/api/geometry_msgs/msg/Pose.html
-   - `def quaternion_from_euler(ai, aj, ak, axes='sxyz'):`
-     - https://github.com/DLu/tf_transformations/blob/main/tf_transformations/__init__.py#L745
-   - `def publish(self, msg: Union[MsgT, bytes]) -> None:`
-     - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/publisher.py#L62
-   - `def get_clock(self) -> Clock:`
-     - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/node.py#L382
-   - `def get_logger(self) -> RcutilsLogger:`
-     - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/node.py#L386
-     - .info()
-       - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/impl/rcutils_logger.py#L418
-   - `rclpy.init()`
-     - https://github.com/ros2/rclpy/blob/rolling/rclpy/rclpy/__init__.py#L119
-    
    
-5. Command
+</br>
+   
+4. Command
    - [0] 공통
       ```
       export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
@@ -116,134 +69,75 @@
       source install/setup.bash
       ```
    - [1] kortex bringup
-      ```
-      ros2 launch kortex_bringup gen3_lite.launch.py \
-        robot_ip:=192.168.1.10
-      ```
+  	 ```
+  	 ros2 launch kortex_bringup gen3_lite.launch.py \
+	 robot_ip:=192.168.1.10
+ 	 ```
    - [2] movegroup
      ```
      ros2 launch kinova_gen3_lite_moveit_config move_group.launch.py\
         publish_robot_description:=true
      ```
-   - [3] plan node
-      ```
-      ros2 run gen3_lite_pickplace plan
-      ```
-   - [4]
-     ```
-     # pick
-      ros2 topic pub --once /pick_pose geometry_msgs/PoseStamped \
-      "{header: {frame_id: 'base_link'},
-        pose: {position: {x: 0.30, y: 0.00, z: 0.05},
-               orientation: {x: 0.0, y: 0.0, z: 0.0, w: 1.0}}}"
-      
-      # place
-         ros2 topic pub --once /place_pose geometry_msgs/PoseStamped \
-         "{header: {frame_id: 'base_link'},
-           pose: {position: {x: 0.40, y: -0.10, z: 0.05},
-                  orientation: {x: 0.0, y: 0.0, z: 0.0, w: 1.0}}}"
-
-     ```
-
-```
-- [0] 공통
-      ```
-      export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
-      export ROS_DOMAIN_ID=2
-      
-      cd ~/ks
-      colcon build
-      source install/setup.bash
-      ```
-      
-      ros2 run realsense2_camera realsense2_camera_node --ros-args \
-  -p enable_color:=true -p enable_depth:=true \
-  -p pointcloud.enable:=true -p align_depth.enable:=true \
-  --log-level debug
-
-
-      
-   - [1] kortex bringup
-      ```
-      ros2 launch kortex_bringup gen3_lite.launch.py \
-        robot_ip:=192.168.1.10
-      ```
-   - [2] movegroup
-     ```
-     ros2 launch kinova_gen3_lite_moveit_config move_group.launch.py\
-        publish_robot_description:=true
-     ```
-     
+   - [3] 임의 위치로 이동
      ```
      ros2 action send_goal /joint_trajectory_controller/follow_joint_trajectory \
-  control_msgs/action/FollowJointTrajectory \
-  "{trajectory: {
-      joint_names: [joint_1,joint_2,joint_3,joint_4,joint_5,joint_6],
-      points: [{positions: [1.4208193447, 0.0704470024, 1.8731641801, -2.0, -0.4543651094, 0.0349651746],
+     control_msgs/action/FollowJointTrajectory \
+     "{trajectory: {
+       joint_names: [joint_1,joint_2,joint_3,joint_4,joint_5,joint_6],
+       points: [{positions: [1.4208193447, 0.0704470024, 1.8731641801, -2.0, -0.4543651094, 0.0349651746],
        time_from_start: {sec: 10}}]}}"
      ```
-     
-     
-   - [3] plan node
+   - [4] pick node ik 계산 가능 여부 확이
+     ```
+     ros2 service call /compute_ik moveit_msgs/srv/GetPositionIK "
+		ik_request:
+		  group_name: arm
+		  ik_link_name: end_effector_link   # 네 환경의 tip 링크명으로
+		  avoid_collisions: true
+		  timeout: {sec: 1, nanosec: 0}
+		  pose_stamped:
+		    header: {frame_id: base_link}
+		    pose:
+		      position: {x: 0.40, y: 0.00, z: 0.157}
+		      orientation: {x: 1.0, y: 0.0, z: 0.0, w: 0.0}
+		  robot_state:
+		    joint_state: {name: [], position: []}  # 빈 seed면 MoveIt이 알아서 현재 상태 사용
+		"	
+     ```
+   - [5] plan node
       ```
       ros2 run gen3_lite_pickplace plan
       ```
-   - [4]
-   
- ros2 service call /compute_ik moveit_msgs/srv/GetPositionIK "
-ik_request:
-  group_name: arm
-  ik_link_name: end_effector_link   # 네 환경의 tip 링크명으로
-  avoid_collisions: true
-  timeout: {sec: 1, nanosec: 0}
-  pose_stamped:
-    header: {frame_id: base_link}
-    pose:
-      position: {x: 0.40, y: 0.00, z: 0.157}
-      orientation: {x: 1.0, y: 0.0, z: 0.0, w: 0.0}
-  robot_state:
-    joint_state: {name: [], position: []}  # 빈 seed면 MoveIt이 알아서 현재 상태 사용
-"
+   - [6] pick, place topic once 보내기
      ```
      # pick (툴 아래, 약간 높게)
      ros2 topic pub --once /pick_pose geometry_msgs/PoseStamped "
-header: {frame_id: base_link}
-pose:
-  position: {x: 0.40, y: 0.00, z: 0.157}
-  orientation: {x: 1.0, y: 0.0, z: 0.0, w: 0.0}
-"
-
-ros2 service call /compute_ik moveit_msgs/srv/GetPositionIK "
-ik_request:
-  group_name: arm
-  ik_link_name: end_effector_link   # 네 환경의 tip 링크명으로
-  avoid_collisions: true
-  timeout: {sec: 1, nanosec: 0}
-  pose_stamped:
-    header: {frame_id: base_link}
-    pose:
-      position: {x: 0.45, y: -0.15, z: 0.171}
-  orientation: {x: 1.0, y: 0.0, z: 0.0, w: 0.0}
-  robot_state:
-    joint_state: {name: [], position: []}  # 빈 seed면 MoveIt이 알아서 현재 상태 사용
-"
-
-
-
-
-
-	# place (비슷한 높이, y 쪽으로 약간 이동)
-ros2 topic pub --once /place_pose geometry_msgs/PoseStamped "
-header: {frame_id: base_link}
-pose:
-  position: {x: 0.45, y: -0.15, z: 0.171}
-  orientation: {x: 1.0, y: 0.0, z: 0.0, w: 0.0}
-"
-
-
+		header: {frame_id: base_link}
+		pose:
+  		position: {x: 0.40, y: 0.00, z: 0.157}
+  		orientation: {x: 1.0, y: 0.0, z: 0.0, w: 0.0}
+		"
      ```
-```
+     ```
+     # place (비슷한 높이, y 쪽으로 약간 이동)
+	 ros2 topic pub --once /place_pose geometry_msgs/PoseStamped "
+	 header: {frame_id: base_link}
+	 pose:
+	   position: {x: 0.45, y: -0.15, z: 0.171}
+	   orientation: {x: 1.0, y: 0.0, z: 0.0, w: 0.0}
+	 "
+	 ```
+
+- 산출물을 위한 realsense camera node 올리기
+  ```
+  ros2 run realsense2_camera realsense2_camera_node --ros-args \
+	-p enable_color:=true -p enable_depth:=true \
+	-p pointcloud.enable:=true -p align_depth.enable:=true \
+	--log-level debug
+  ```
+
+</br>
    
-7. Result
+5. Result
    - Simulation (with rviz2)
    - Video (Physical Robot)
