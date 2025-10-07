@@ -16,6 +16,9 @@
     ```
 - work space 사용하는 경우
   - `source ~ws/install/setup.bash`
+ 
+</br>
+
 ## 1. ROS2 nodes
 - [1] graph
   - 동시에 데이터를 처리하는 ROS2 요소들의 네트워크 (연결)
@@ -24,15 +27,20 @@
     > <img width="854" height="480" alt="image" src="https://github.com/user-attachments/assets/5d998a70-ea2b-4f43-b852-b4f84d4bc4a0" />
 - [3] 실행
   - `ros2 run <package_name> <executable_file_name>`
-- [4] node list
+- [4] node list & node info
   - `ros2 node list`
-  - run 한 node 이름
-- [5] 
-
+    - run 한 node 이름
+  - `ros2 node info /<node name>`
+- [5] remapping
+  - `ros2 run <package_name> <executable_file_name> --ros-args -r <args name>:= `
 
 </br>
 
 ## 2. ROS2 topics
+- [1]
+
+</br>
+
 ## 3. ROS2 services
 ## 4. ROS2 parameters
 ## 5. ROS2 actions
