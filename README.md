@@ -39,8 +39,7 @@
 ## 2. ROS2 topics
 - [1] topics
   - 동시에
-    - <img width="854" height="480" alt="image" src="https://github.com/user-attachments/assets/76d438eb-52df-4170-9737-69993ebf8a7c" />
-
+    > https://github.com/gimseongyeon545/Basic-Ros2/issues/1#issue-3495637000
 
 </br>
 
