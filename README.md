@@ -1,6 +1,6 @@
 # basic ros2 example (with rclpy)
 - Understanding ROS2 nodes/topics/services/parameters/actions
-  - https://docs.ros.org/en/crystal/Tutorials/Understanding-ROS2-Nodes.html
+  - https://docs.ros.org/en/humble/Tutorials.html
 ## 0. configuring environment
 - DOMAIN
   ```
@@ -37,7 +37,10 @@
 </br>
 
 ## 2. ROS2 topics
-- [1]
+- [1] topics
+  - 동시에
+    - <img width="854" height="480" alt="image" src="https://github.com/user-attachments/assets/76d438eb-52df-4170-9737-69993ebf8a7c" />
+
 
 </br>
 
