@@ -18,8 +18,8 @@ class HeartBeatpub(Node):
     msg = String()
     msg.data = 'heartbeat msg'
     self.HBpub.publish(msg)
-    self.get_logger().info(f'heartbeat pub cnt: {cnt}')  
+    self.get_logger().info(f'heartbeat pub cnt: {self.cnt}')  
 
 rclpy.init()
-rclpy.spin(HeartBeatpub)
+rclpy.spin(HeartBeatpub())
 rclpy.shutdown()
