@@ -77,6 +77,58 @@
 </br>
 
 ## 3. ROS2 services
-- [1] 
+- [1] **Request(Client) & Response(Server)**
+  - 지속적 데이터 제공 및 업데이트를 해주는 topic 과 달리, service 는 client 가 호출할 때만 데이터 제공
+    > ![Image](https://github.com/user-attachments/assets/4ce58373-f1e8-48a7-84af-266ddf74acf9)
+- [2] service list
+  - `ros2 service list`
+- [3] service type
+  - `ros2 service type <service_name>`
+    - ex 출력: `std_srvs/srv/Empty`
+      - `Empty` type: service 가 request 를 만들고, response 를 받는 데이터가 없다
+  - `ros2 service list -t`
+    - `-t`: --show-types 약어
+    - 출력: `<service name> [service_type]`
+- [4] service find
+  - `ros2 service find <type_name>`
+- [5] interface show
+  - `ros2 interface show <type_name>`
+  - `---` 로 구분된 출력 (데이터 구조)
+- [6] service call
+  - `ros2 service call <service_name> <service_type> <arguments>`
+    - `<arguments>` optional / 데이터 구조대로 데이터 전달
+    - requester, response 한 번 수행
+
+</br>
+
 ## 4. ROS2 parameters
+- [1] parameter list
+  - `ros2 param list`
+  - 모든 노드들이 가지는 parameter: `use_sim_time`
+- [2] parameter get
+  - `ros2 param get <node_name> <parameter_name>`
+  - 현재 paramter_name 의 값을 불러옴
+- [3] parameter set
+  - `ros2 param set <node_name> <paramater_name> <value>`
+  - not permanent
+- [4] paramter dump
+  - `ros2 param dump <node_name>`
+    - 모든 paramter 의 현재 값 확인
+  - `ros2 param dump <node_name> > <파일 이름>`
+    - working directory 에 해당 파일 이름의 파일이 생성되고, 내부에 관련 paramters 현재 값
+- [5] parameter load
+  - `ros2 param load <node_name> <parmater_file>`
+    - 해당 paramter_file 의 파라미터들 불러와서 setting 시키기
+- [6] 
+
+
+
+
+
+
+
+
+
+
+
 ## 5. ROS2 actions
