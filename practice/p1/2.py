@@ -14,7 +14,7 @@ class StatusSub(Node):
 
   def cb(self, msg):
     self.cnt += 1
-    self.get_logger().info(f'heartbeat sub cnt: {self.cnt}')
+    self.get_logger().info(f'heartbeat sub cnt: {self.cnt} || data = {msg.data}')
 
 rclpy.init()
 rclpy.spin(StatusSub())
