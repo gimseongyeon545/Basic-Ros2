@@ -114,21 +114,39 @@
 - [4] paramter dump
   - `ros2 param dump <node_name>`
     - 모든 paramter 의 현재 값 확인
-  - `ros2 param dump <node_name> > <파일 이름>`
+  - `ros2 param dump <node_name> > <file_name>`
     - working directory 에 해당 파일 이름의 파일이 생성되고, 내부에 관련 paramters 현재 값
 - [5] parameter load
   - `ros2 param load <node_name> <parmater_file>`
-    - 해당 paramter_file 의 파라미터들 불러와서 setting 시키기
-- [6] 
-
-
-
-
-
-
-
-
-
-
+    - 이미 실행 중인 노드에 file 의 내용으로 파라미터 변경하고 싶을 때
+  - `ros2 run <package_name> <node_name> --ros-args --params-file <file_name>`
+    - 노드 시작할 때, 해당 paramter_file 의 파라미터들 불러와서 setting 시키기
+      
+</br>
 
 ## 5. ROS2 actions
+- [1] **Goal, Feedback, Result**
+  - service 처럼 request/response 구조이지만 중간 feedback, 취소 기능 추가
+  - action client 가 Goal 을 알고 있고, feedback, result 를 반환하는 action server 에게 Goal을 보냄
+    > ![Image](https://github.com/user-attachments/assets/d61d4082-bae8-4fc9-9acf-cf82ed65fd46)
+- [2] `ros2 node info <node_name>`
+  - subscribers, publishers, service servers,clients, action servers,clients
+- [3] action list
+  - `ros2 action list`
+  - `ros2 action list -t` (types 함께 반환)
+- [4] action info
+  - `ros2 action info <action_name>`
+    - Action name, clients, servers
+- [5] interface show
+  - `ros2 interface show <action_name>`
+- [6] send_goal
+  - `ros2 action send_goal <action_name> <action_type> <values>`
+    - goal, result 출력
+    - feedback 보고 싶다면 맨 뒤에 `--feedback`
+    
+
+
+
+
+
+    
