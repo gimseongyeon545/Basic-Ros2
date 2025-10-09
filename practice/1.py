@@ -1,5 +1,5 @@
 import rclpy
-
+import rclpy.node as Node
 
 class timer(Node):
   def __init__(self):
