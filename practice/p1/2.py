@@ -2,19 +2,20 @@
 # [status_sub]
 
 import rclpy
-import rclpy.node as Node
+from rclpy.node import Node
+from std_msgs.msg import String
 
 class StatusSub(Node):
   def __init__(self):
     super().__init__('status_sub')
-    self.StatusSub = self.create_subscription(String, '/mini/hearbeat', self.cb, 10)
-    self.timer = self.creat_timer(0.5, self.cb)
+    self.StatusSub = self.create_subscription(String, '/mini/heartbeat', self.cb, 10)
+    self.timer = self.create_timer(0.5, self.cb)
     self.cnt = 0
 
   def cb(self, msg):
     self.cnt += 1
-    self.get_logger().info(f'heartbeat sub cnt: {cnt}')
+    self.get_logger().info(f'heartbeat sub cnt: {self.cnt}')
 
 rclpy.init()
-rclpy.spin(StatusSub)
+rclpy.spin(StatusSub())
 rclpy.shutdown()
