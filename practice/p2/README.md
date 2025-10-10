@@ -1,3 +1,4 @@
+```
 /joy (sensor_msgs/Joy)
       │
       ▼
@@ -9,3 +10,4 @@
                                │                               │
       [enable_client] ──SetBool /mini/enable ⇒─────────────────┘
         (주기적 토글 요청)
+```
