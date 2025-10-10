@@ -1,5 +1,8 @@
-# [heartbeat_pub] ──(String /mini/heartbeat)──▶ [status_sub]
-# [heartbeat_pub]
+'''
+[heartbeat_pub] --( /mini/heartbeat : std_msgs/String )--> [status_sub]
+        │                                                   ▲
+        └─ uses Timer(hz) & Parameters(text,hz) ────────────┘
+'''
 
 from rclpy.node import Node
 import rclpy
