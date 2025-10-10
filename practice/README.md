@@ -1,46 +1,45 @@
+# 1. pub/sub/timer/qos/param
 ```
-[heartbeat_pub] ──(String /mini/heartbeat)──▶ [status_sub]
+[heartbeat_pub] --( /mini/heartbeat : std_msgs/String )--> [status_sub]
+        │                                                   ▲
+        └─ uses Timer(hz) & Parameters(text,hz) ────────────┘
 
+[qos_matrix_demo] <─┐ 실험용: 퍼블/섭 양쪽 QoS 바꿔가며 손실/지연 관찰
+                    └─( /mini/heartbeat )<─[heartbeat_pub]
 
-/joy (sensor_msgs/Joy)
-      │
-      ▼
-[joy_to_twist] ──(Twist /mini/cmd_vel_raw)──▶ [cmd_gain] ──(Twist /mini/cmd_vel)──▶ (리맵 옵션) /turtle1/cmd_vel
-                               ▲
-                               │ (Bool /mini/enabled [TL])
-                    [enable_server] ─────────────────────────────────────────────▶
-                               ▲                               ▲
-                               │                               │
-      [enable_client] ──SetBool /mini/enable ⇒─────────────────┘
-        (주기적 토글 요청)
-
-
-[counter_with_reset] ──(Int32 /mini/count)──▶ (소비자/RViz/echo 등)
-     ▲
-     └── Empty /mini/reset ⇐ ros2 service call (외부 도구 또는 별도 클라)
-
-
-[latched_config_pub] ──(String /mini/config [TL])──▶ [config_listener]
-
-
-[tf_pose_relay] : (PoseStamped /mini/pose_in) ──TF 변환(target_frame)──▶ (PoseStamped /mini/pose_out)
-                     └── TF Buffer/Listener ── 조회 ──▶ (TF tree: ex. base_link, camera_link ...)
-
-
-[joint_state_dummy_pub] ──(sensor_msgs/JointState /joint_states)──▶ (RViz2/상태 뷰어)
-
-
-[fibonacci_action_client] ⇄ (action /mini/fibonacci) ⇄ [fibonacci_action_server]
-         (order, 취소옵션)                           (피드백/결과)
-
+[ros2 param]* ──(set/get)──> [heartbeat_pub]   *CLI로 hz,text 동적 변경
 ```
 
 </br>
 
-[1] 1.py, 2.py
-- 도식
-  ```
-  [heartbeat_pub] ──(String /mini/heartbeat)──▶ [status_sub]
-  ```
-- 1.py: heartbeat_pub
-- 2.py: status_sub
+# 2. service, action (request, response, cancel, feedback)
+```
+[adder_client] --call--> (AddTwoInts.srv) --serve--> [adder_service]
+      ▲                                         │
+      └────────────── result <──────────────────┘
+
+[gripper_action_client] ==goal==> (GripperCommand.action server)
+       ▲                 <== feedback/result ==
+       └==================== cancel =====================
+
+[traj_action_client] ==goal(JointTrajectory)==> (FollowJointTrajectory server)
+        ▲                     <== feedback/result ==
+        └========================= cancel =========================
+```
+
+</br>
+
+# 3. TF2 & pose 변환
+```
+(static TF)         (dynamic TF, 학습용)
+[static_frames] ──> base_link ──> tool_frame
+[vr_dummy_broadcaster] ──> steamvr_world ──> controller
+
+[tf_echo_logger] --lookup(base→tool, world→controller)--> 로그
+
+[pose_relay_transform]
+   subscribes:  (/in_pose : PoseStamped [frame=A])
+   uses:        TF2 Buffer/Listener
+   publishes:   (/out_pose : PoseStamped [frame=B])
+   실패시: 재시도/타임아웃 로그
+```
