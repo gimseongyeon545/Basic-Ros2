@@ -30,7 +30,7 @@ class adder_client(Node):
     self.future = self.cli.call_async(self.req) # Future class 반환
 
     # [3] 방법1) 동기식: spin_until_future_complete -> future.result()
-    rclpy.spin_until_future_complete(self, self.future)
+    rclpy.spin_until_future_complete(self.future)
     self.res = self.future.result()
     self.get_logger().info(f'res: {self.res}')
     return self.res
