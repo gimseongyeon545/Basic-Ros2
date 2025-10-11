@@ -15,7 +15,7 @@ class adder_client(Node):
     super().__init__(self):
     self.cli = self.create_client(AddTwoInts, 'adder', 10)
 
-    # [0] service 호출 waiting
+    # [0] service 호출 waiting: wait_for_service
     if self.cli.wait_for_service(1.0): # 1초 안에 server 뜨면
       self.get_logger().info('service came')
     else:
