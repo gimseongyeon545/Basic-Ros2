@@ -1,4 +1,4 @@
-# basic ros2 example (with rclpy)
+# [1] basic ros2 example (with rclpy)
 - Understanding ROS2 nodes/topics/services/parameters/actions
   - https://docs.ros.org/en/humble/Tutorials.html
 ## 0. configuring environment
@@ -145,7 +145,10 @@
     - feedback 보고 싶다면 맨 뒤에 `--feedback`
     
 
+</br>
 
+# [2] paper
+- 관련 논문들
 
 
 
